@@ -67,11 +67,15 @@ namespace StarChart.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, CelestialObject celestialObject)
         {
-            if (_context.CelestialObjects.Find(id) == null)
+            var celestialObjectToUpdate = _context.CelestialObjects.Find(id);
+            if (celestialObjectToUpdate == null)
             {
                 return NotFound();
             }
-            _context.CelestialObjects.Update(celestialObject);
+            celestialObjectToUpdate.Name = celestialObject.Name;
+            celestialObjectToUpdate.OrbitalPeriod = celestialObject.OrbitalPeriod;
+            celestialObjectToUpdate.OrbitalPeriod = celestialObject.OrbitalPeriod;
+            _context.CelestialObjects.Update(celestialObjectToUpdate);
             _context.SaveChanges();
 
             return NoContent();
@@ -97,7 +101,7 @@ namespace StarChart.Controllers
         {
             var celestialObjects = _context.CelestialObjects.Where(e => e.OrbitedObjectId == id || e.Id == id).ToList();
             
-            if (celestialObjects == null)
+            if (!celestialObjects.Any())
             {
                 return NotFound();
             }
